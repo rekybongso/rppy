@@ -1,97 +1,120 @@
-import random
-from os import system, name
+class Mechanics:
 
-class MainMechanic:
+    def __init__(self, playerInput, botInput, playerScoreList, botScoreList, roundPlayed):
+        self.roundPlayed = roundPlayed
+        self.playerInput = playerInput
+        self.playerScoreList = playerScoreList
+        self.botInput = botInput
+        self.botScoreList = botScoreList
 
-    def clearTheScreen(self):
-        if name == 'nt':
-            _ = system('cls')
-        else:
-            _ = system('clear')
+    def countRound(self):
+        roundList = self.roundPlayed
+
+        prevRound = roundList[-1]
+        nextRound = prevRound + 1
+        roundList.append(nextRound)
+
+        thisRound = int(roundList[-1])
+
+        return thisRound
+
+    def addPlayerScore(self):
+        scoreList = self.playerScoreList
+
+        lastScore = scoreList[-1]
+        newScore = lastScore + 1
+        scoreList.append(newScore)
+
+        scoreResult = self.getPlayerScore()
+
+        return scoreResult
     
-    def makeScreen(self):
-        print('''
-        ----------------------------
-        - Welcome to rock-paper-py -
-        ----------------------------
+    def getPlayerScore(self):
+        scoreList = self.playerScoreList
+        scoreResult = int(scoreList[-1])
 
-        Instruction:
-        1) Please type between rock, paper, or scissor
-        2) You can also input the first char from each available choices eg: r for rock
-        3) Have fun! 
-        ''')
+        return scoreResult
 
-    def getValidInput(self, prompMessageToUser):
-        acceptedInput = ("rock","paper","scissor", "r", "p", "s")
-        repeatCheckInput = True
+    def addBotScore(self):
+        scoreList = self.botScoreList
 
-        while (repeatCheckInput):
+        lastScore = scoreList[-1]
+        newScore = lastScore + 1
+        scoreList.append(newScore)
 
-            userInputToCheck = input(prompMessageToUser).lower()
-
-            if (userInputToCheck.isspace()) or \
-                (userInputToCheck.isalpha() == False) or \
-                (userInputToCheck not in acceptedInput):
-
-                print ("Invalid input received. Please try again!")
-
-            else:
-                userInputToCheck = self.doTransfromInput(userInputToCheck)
-
-                validOutput = userInputToCheck
-                repeatCheckInput = False
-                
-        return validOutput
+        scoreResult = self.getBotScore()
         
-    def doTransfromInput(self, inputToTransform):
-        originInput = inputToTransform
+        return scoreResult
 
-        switchOutput = {
-            "r": "rock",
-            "p": "paper",
-            "s": "scissor"
-        }
+    def getBotScore(self):
+        scoreList = self.botScoreList
+        scoreResult = int(scoreList[-1])
 
-        finalOutput = switchOutput.get(originInput, "nothing")
+        return scoreResult
 
-        if finalOutput == "nothing":
-            return originInput
-        else:
-            return finalOutput
-
-    def randomizeBotOutput(self):
-        botChoices = ("rock", "paper", "scissor")
-        botOutput = random.choice(botChoices)
-        return botOutput
+    def isGameTie(self):
+        return self.playerInput == self.botInput
     
-    def isGameTie(self, playerInput, botInput):
-        return playerInput == botInput
-    
-    def isPlayerWin(self, playerInput, botInput):
+    def isPlayerWin(self):
+        playerInput = self.playerInput
+        botInput = self.botInput
+
         return (playerInput == "scissor" and  botInput == "paper") or \
             (playerInput == "rock" and botInput == "scissor") or \
             (playerInput == "paper" and botInput == "rock")
 
-    def decideTheResult(self, playerInput, botInput):
-        player = playerInput
-        bot = botInput
-
-        if self.isGameTie(player, bot) == True:
-            return "Game is tie!"
+    def gameResult(self):
+        if self.isGameTie() == True:
+            return "tie"
+        elif self.isPlayerWin() == True:
+            return "win"
         else:
-            if self.isPlayerWin(player, bot) == True:
-                return "Player win"
-            else:
-                return "Player lose"
+            return "lose"
 
-    def playTheGame(self, playerInput, botInput):
-        player = playerInput
-        bot = botInput
+    def playGame(self):
+        getResult = self.gameResult()
+        showResult = getattr(self, getResult, lambda: "None")
 
-        gameResult = self.decideTheResult(player, bot)
-            
-        print (
-            " Player pick", player, "\n",
-            "Bot pick", bot, "\n",
-            gameResult
-        )
+        return showResult()
+
+    def tie(self):
+        playerScore = self.getPlayerScore()
+        botScore = self.getBotScore()
+        roundPlayed = self.countRound()
+
+        print("\nRounds:", roundPlayed)
+        print(
+            "\n Player pick", self.playerInput.upper(), "\n",
+            "Bot pick", self.botInput.upper(), "\n"
+            " \nNo winner! Game is a Tie!\n"
+            )
+
+        print("Player score:", playerScore, " | ", "Bot Score:", botScore)
+    
+    def win(self):
+        playerScore = self.addPlayerScore()
+        botScore = self.getBotScore()
+        roundPlayed = self.countRound()
+
+        print("\nRounds:", roundPlayed)
+        print(
+            "\n Player pick", self.playerInput.upper(), "\n",
+            "Bot pick", self.botInput.upper(), "\n"
+            " \nPlayer win!\n"
+            )
+
+        print("Player score:", playerScore, " | ", "Bot Score:", botScore)
+    
+    def lose(self):
+        playerScore = self.getPlayerScore()
+        botScore = self.addBotScore()
+        roundPlayed = self.countRound()
+
+        print("\nRounds:", roundPlayed)
+        print(
+            "\n Player pick", self.playerInput.upper(), "\n",
+            "Bot pick", self.botInput.upper(), "\n"
+            " \nBot win!\n"
+            )
+
+        print("Player score:", playerScore, " | ", "Bot Score:", botScore)
