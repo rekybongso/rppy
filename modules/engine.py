@@ -9,7 +9,7 @@ class GameMechanics:
         self.botInput = botInput
         self.botScoreList = botScoreList
         
-    def countRound(self):
+    def getRoundsPlayed(self):
         roundList = self.roundPlayed
 
         prevRound = roundList[-1]
@@ -54,6 +54,13 @@ class GameMechanics:
         
         return scoreResult
 
+    def varAdapter(self):
+        roundPlayed = changeTextColor(self.getRoundsPlayed(), "cyan")
+        playerInput = changeTextColor(self.playerInput.upper(), "blue")
+        botInput = changeTextColor(self.botInput.upper(), "red")
+
+        return roundPlayed, playerInput, botInput    
+
     def isGameTie(self):
         return self.playerInput == self.botInput
     
@@ -80,54 +87,45 @@ class GameMechanics:
         return showResult()
 
     def tie(self):
-        roundPlayed = changeTextColor(self.countRound(), "cyan")
-        
         playerScore = changeTextColor(self.getPlayerScore(), "green")
         botScore = changeTextColor(self.getBotScore(), "green")
 
-        playerInput = changeTextColor(self.playerInput.upper(), "blue")
-        botInput = changeTextColor(self.botInput.upper(), "red")           
+        adaptRoundPlayed, adaptPlayerInput, adaptBotInput = self.varAdapter()
 
-        print("\nRounds:", roundPlayed)
+        print("\nRounds:", adaptRoundPlayed)
         print(
-            "\n Player pick", playerInput, "\n",
-            "Bot pick", botInput, "\n"
+            "\n Player pick", adaptPlayerInput, "\n",
+            "Bot pick", adaptBotInput, "\n"
             " \nNo winner! Game is a Tie!\n"
             )
 
         print("Player score:", playerScore, " | ", "Bot Score:", botScore)
     
     def win(self):
-        roundPlayed = changeTextColor(self.countRound(), "cyan")
-
         playerScore = changeTextColor (self.addPlayerScore(), "green")
         botScore = changeTextColor (self.getBotScore(), "green")
 
-        playerInput = changeTextColor(self.playerInput.upper(), "blue")
-        botInput = changeTextColor(self.botInput.upper(), "red")  
+        adaptRoundPlayed, adaptPlayerInput, adaptBotInput = self.varAdapter()
 
-        print("\nRounds:", roundPlayed)
+        print("\nRounds:", adaptRoundPlayed)
         print(
-            "\n Player pick", playerInput, "\n",
-            "Bot pick", botInput, "\n"
+            "\n Player pick", adaptPlayerInput, "\n",
+            "Bot pick", adaptBotInput, "\n"
             " \nPlayer win!\n"
             )
 
         print("Player score:", playerScore, " | ", "Bot Score:", botScore)
     
     def lose(self):
-        roundPlayed = changeTextColor(self.countRound(), "cyan")
-
         playerScore = changeTextColor (self.getPlayerScore(), "green")
-        botScore = changeTextColor (self.addBotScore(), "green")
+        botScore = changeTextColor (self.addBotScore(), "green")  
 
-        playerInput = changeTextColor(self.playerInput.upper(), "blue")
-        botInput = changeTextColor(self.botInput.upper(), "red")  
+        adaptRoundPlayed, adaptPlayerInput, adaptBotInput = self.varAdapter()
 
-        print("\nRounds:", roundPlayed)
+        print("\nRounds:", adaptRoundPlayed)
         print(
-            "\n Player pick", playerInput, "\n",
-            "Bot pick", botInput, "\n"
+            "\n Player pick", adaptPlayerInput, "\n",
+            "Bot pick", adaptBotInput, "\n"
             " \nBot win!\n"
             )
 
