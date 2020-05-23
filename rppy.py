@@ -1,6 +1,5 @@
-from modules import game_engine, utils
-
-gameUtility = utils.MainFunctions()
+from modules import engine
+from modules.utils import clearScreen, makeScreen, getValidInput, randomizeBotOutput, changeTextColor
 
 play = True
 
@@ -8,15 +7,18 @@ playerScore = [0]
 botScore = [0]
 roundPlayed = [0]
 
+phrasesToAccept = ("y", "yes", "g", "go", "yeah", "sure")
+phrasesToDecline = ("n", "no", "stop", "nope", "bye")
+
 while (play):    
-    gameUtility.clearScreen()
-    gameUtility.makeScreen()
+    clearScreen()
+    makeScreen()
 
-    playerInput = gameUtility.getValidInput("Your pick > ")
-    botInput = gameUtility.randomizeBotOutput()
+    playerInput = getValidInput("Your pick > ")
+    botInput = randomizeBotOutput()
 
-    gameMechanic = game_engine.Mechanics(playerInput, botInput, playerScore, 
-                                            botScore, roundPlayed)
+    gameMechanic = engine.GameMechanics(playerInput, botInput, playerScore, 
+                                    botScore, roundPlayed)
                                             
     gameMechanic.playGame()
     repeat = True
@@ -24,10 +26,11 @@ while (play):
     while (repeat):
         askToRepeat = input("Play again (y: yes | n: no)? ").lower()
 
-        if askToRepeat in ("y", "yes"):
+        if askToRepeat in phrasesToAccept:
             break
-        elif askToRepeat in ("n", "no"):
+        elif askToRepeat in phrasesToDecline:
             play = False
             break
         else:
-            print ("Unkown choice received. Please try again!")
+            print(changeTextColor("Unkown choice received. Please try again!", "yellow"))
+            

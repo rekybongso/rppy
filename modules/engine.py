@@ -1,4 +1,6 @@
-class Mechanics:
+from modules.utils import changeTextColor
+
+class GameMechanics:
 
     def __init__(self, playerInput, botInput, playerScoreList, botScoreList, roundPlayed):
         self.roundPlayed = roundPlayed
@@ -6,50 +8,50 @@ class Mechanics:
         self.playerScoreList = playerScoreList
         self.botInput = botInput
         self.botScoreList = botScoreList
-
+        
     def countRound(self):
         roundList = self.roundPlayed
 
         prevRound = roundList[-1]
         nextRound = prevRound + 1
+
         roundList.append(nextRound)
+        currentRound = int(roundList[-1])
 
-        thisRound = int(roundList[-1])
+        return currentRound
 
-        return thisRound
-
-    def addPlayerScore(self):
-        scoreList = self.playerScoreList
-
-        lastScore = scoreList[-1]
-        newScore = lastScore + 1
-        scoreList.append(newScore)
-
-        scoreResult = self.getPlayerScore()
-
-        return scoreResult
-    
     def getPlayerScore(self):
         scoreList = self.playerScoreList
         scoreResult = int(scoreList[-1])
 
         return scoreResult
 
-    def addBotScore(self):
-        scoreList = self.botScoreList
-
-        lastScore = scoreList[-1]
-        newScore = lastScore + 1
-        scoreList.append(newScore)
-
-        scoreResult = self.getBotScore()
-        
-        return scoreResult
-
     def getBotScore(self):
         scoreList = self.botScoreList
         scoreResult = int(scoreList[-1])
 
+        return scoreResult
+
+    def addPlayerScore(self):
+        lastScore = self.getPlayerScore()
+        newScore = lastScore + 1
+
+        scoreList = self.playerScoreList
+        scoreList.append(newScore)
+
+        scoreResult = self.getPlayerScore()
+
+        return scoreResult
+    
+    def addBotScore(self):
+        lastScore = self.getBotScore()
+        newScore = lastScore + 1
+
+        scoreList = self.botScoreList
+        scoreList.append(newScore)
+
+        scoreResult = self.getBotScore()
+        
         return scoreResult
 
     def isGameTie(self):
@@ -78,42 +80,54 @@ class Mechanics:
         return showResult()
 
     def tie(self):
-        playerScore = self.getPlayerScore()
-        botScore = self.getBotScore()
-        roundPlayed = self.countRound()
+        roundPlayed = changeTextColor(self.countRound(), "cyan")
+        
+        playerScore = changeTextColor(self.getPlayerScore(), "green")
+        botScore = changeTextColor(self.getBotScore(), "green")
+
+        playerInput = changeTextColor(self.playerInput.upper(), "blue")
+        botInput = changeTextColor(self.botInput.upper(), "red")           
 
         print("\nRounds:", roundPlayed)
         print(
-            "\n Player pick", self.playerInput.upper(), "\n",
-            "Bot pick", self.botInput.upper(), "\n"
+            "\n Player pick", playerInput, "\n",
+            "Bot pick", botInput, "\n"
             " \nNo winner! Game is a Tie!\n"
             )
 
         print("Player score:", playerScore, " | ", "Bot Score:", botScore)
     
     def win(self):
-        playerScore = self.addPlayerScore()
-        botScore = self.getBotScore()
-        roundPlayed = self.countRound()
+        roundPlayed = changeTextColor(self.countRound(), "cyan")
+
+        playerScore = changeTextColor (self.addPlayerScore(), "green")
+        botScore = changeTextColor (self.getBotScore(), "green")
+
+        playerInput = changeTextColor(self.playerInput.upper(), "blue")
+        botInput = changeTextColor(self.botInput.upper(), "red")  
 
         print("\nRounds:", roundPlayed)
         print(
-            "\n Player pick", self.playerInput.upper(), "\n",
-            "Bot pick", self.botInput.upper(), "\n"
+            "\n Player pick", playerInput, "\n",
+            "Bot pick", botInput, "\n"
             " \nPlayer win!\n"
             )
 
         print("Player score:", playerScore, " | ", "Bot Score:", botScore)
     
     def lose(self):
-        playerScore = self.getPlayerScore()
-        botScore = self.addBotScore()
-        roundPlayed = self.countRound()
+        roundPlayed = changeTextColor(self.countRound(), "cyan")
+
+        playerScore = changeTextColor (self.getPlayerScore(), "green")
+        botScore = changeTextColor (self.addBotScore(), "green")
+
+        playerInput = changeTextColor(self.playerInput.upper(), "blue")
+        botInput = changeTextColor(self.botInput.upper(), "red")  
 
         print("\nRounds:", roundPlayed)
         print(
-            "\n Player pick", self.playerInput.upper(), "\n",
-            "Bot pick", self.botInput.upper(), "\n"
+            "\n Player pick", playerInput, "\n",
+            "Bot pick", botInput, "\n"
             " \nBot win!\n"
             )
 
